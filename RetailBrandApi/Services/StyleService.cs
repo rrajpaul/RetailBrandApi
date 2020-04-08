@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace RetailBrandApi.Services
 {
-    public class StyleService
+    public class StyleService : RetailBrandType<Style>
     {
         private readonly IMongoCollection<Style> _styles;
 
@@ -18,26 +18,31 @@ namespace RetailBrandApi.Services
             _styles = database.GetCollection<Style>(settings.StyleCollectionName);
         }
 
-        public List<Style> Get() =>
+        public override List<Style> Get() =>
             _styles.Find(style => true).ToList();
 
-        public Style Get(int id) =>
+        public override Style Get(int id) =>
             _styles.Find<Style>(style => style.StyleId == id).FirstOrDefault();
 
-        public Style Create(Style style)
+        public override Style Create(Style style)
         {
             _styles.InsertOne(style);
             return style;
         }
 
-        public void Update(Style styleIn) =>
-        _styles.ReplaceOne(style => style.StyleId == styleIn.StyleId, styleIn);
+        public override void Update(Style styleIn)
+        {
+            _styles.ReplaceOne(style => style.StyleId == styleIn.StyleId, styleIn);
+        }
 
-
-        public void Remove(Style styleIn) =>
+        public override void Remove(Style styleIn)
+        {
             _styles.DeleteOne(style => style.StyleId == styleIn.StyleId);
+        }
 
-        public void Remove(int id) =>
+        public override void Remove(int id)
+        {
             _styles.DeleteOne(style => style.StyleId == id);
+        }
     }
 }

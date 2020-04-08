@@ -33,8 +33,6 @@ namespace RetailBrandApi
 
             services.AddSingleton<SkuService>();
 
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             services.AddMvc(options =>
                 options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -66,8 +64,13 @@ namespace RetailBrandApi
 
 
             app.UseHttpsRedirection();
-            
-            app.UseMvc();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "swagger/index.html");
+            });
         }
     }
 }

@@ -6,8 +6,6 @@ using System;
 
 namespace RetailBrandApi.Controllers
 {
-    // [Route("api/[controller]")]
-    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RetailBrandController : ControllerBase
     {
@@ -20,14 +18,17 @@ namespace RetailBrandApi.Controllers
             _skuService = skuService;
         }
 
+   
         [HttpGet]
+        [Route("demo/api/styles/")]
         public ActionResult<List<Style>> GetStyles() =>
             _styleService.Get();
 
         [HttpGet]
-        public ActionResult<Style> GetStyle(int id)
+        [Route("demo/api/styles/{styleId}")]
+        public ActionResult<Style> GetStyle(int styleId)
         {
-            var style = _styleService.Get(id);
+            var style = _styleService.Get(styleId);
 
             if (style == null)
             {
@@ -38,9 +39,10 @@ namespace RetailBrandApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Sku> GetSku(int id)
+        [Route("demo/api/skus/{styleId}")]
+        public ActionResult<Sku> GetSku(int styleId)
         {
-            var sku = _skuService.GetSku(id);
+            var sku = _skuService.Get(styleId);
 
             if (sku == null)
             {
@@ -52,9 +54,10 @@ namespace RetailBrandApi.Controllers
 
 
         [HttpGet]
-        public ActionResult<List<Sku>> GetSkuByStyle(int id)
+        [Route("demo/api/styles/{styleId}/skus")]
+        public ActionResult<List<Sku>> GetSkuByStyle(int styleId)
         {
-            var sku = _skuService.GetSkuByStyle(id);
+            var sku = _skuService.GetSkuByStyle(styleId);
 
             if (sku == null)
             {
@@ -65,6 +68,7 @@ namespace RetailBrandApi.Controllers
         }
 
         [HttpPost]
+        [Route("demo/api/styles")]
         public ActionResult<Style> PostStyle(Style style)
         {
             _styleService.Create(style);
@@ -73,6 +77,7 @@ namespace RetailBrandApi.Controllers
         }
 
         [HttpPost]
+        [Route("demo/api/skus")]
         public ActionResult<Sku> PostSku(Sku sku)
         {
             _skuService.Create(sku);
@@ -81,38 +86,40 @@ namespace RetailBrandApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult PutStyle(Style styleIn)
+        [Route("demo/api/styles/{styleId}")]
+        public IActionResult PutStyle(Style style)
         {
-            var style = _styleService.Get(styleIn.StyleId);
+            var styleLocal = _styleService.Get(style.StyleId);
 
-            style.Brand = styleIn.Brand;
-            style.Category = styleIn.Category;
-            style.Description = styleIn.Description;
-            style.Manufacturer = styleIn.Manufacturer;
-            style.Type = styleIn.Type;
+            styleLocal.Brand = style.Brand;
+            styleLocal.Category = style.Category;
+            styleLocal.Description = style.Description;
+            styleLocal.Manufacturer = style.Manufacturer;
+            styleLocal.Type = style.Type;
 
-            if (style == null)
+            if (styleLocal == null)
             {
                 throw new NotImplementedException();
             }
 
-            _styleService.Update(style);
+            _styleService.Update(styleLocal);
 
             return NoContent();
         }
 
         [HttpPut]
-        public IActionResult PutSku(Sku skuIn)
+        [Route("demo/api/skus/{styleId}")]
+        public IActionResult PutSku(Sku sku)
         {
-            var sku = _skuService.GetSku(skuIn.SkuNumber);
+            var skuLocal = _skuService.Get(sku.SkuNumber);
 
-            sku.StyleId = skuIn.StyleId;
-            sku.InStock = skuIn.InStock;
-            sku.Price = skuIn.Price;
-            sku.Size = skuIn.Size;
-            sku.Color = skuIn.Color;
+            skuLocal.StyleId = sku.StyleId;
+            skuLocal.InStock = sku.InStock;
+            skuLocal.Price = sku.Price;
+            skuLocal.Size = sku.Size;
+            skuLocal.Color = sku.Color;
 
-            if (sku == null)
+            if (skuLocal == null)
             {
                 throw new NotImplementedException();
             }
@@ -123,9 +130,10 @@ namespace RetailBrandApi.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteStyle(int id)
+        [Route("demo/api/styles/{styleId}")]
+        public IActionResult DeleteStyle(int styleId)
         {
-            var style = _styleService.Get(id);
+            var style = _styleService.Get(styleId);
 
             if (style == null)
             {
@@ -138,9 +146,10 @@ namespace RetailBrandApi.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteSku(int id)
+        [Route("demo/api/skus/{SkuNumber}")]
+        public IActionResult DeleteSku(int SkuNumber)
         {
-            var sku = _skuService.GetSku(id);
+            var sku = _skuService.Get(SkuNumber);
 
             if (sku == null)
             {

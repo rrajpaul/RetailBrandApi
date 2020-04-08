@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace RetailBrandApi.Services
 {
-    public class SkuService
+    public class SkuService : RetailBrandType<Sku>
     {
         private readonly IMongoCollection<Sku> _sku;
 
@@ -18,28 +18,38 @@ namespace RetailBrandApi.Services
             _sku = database.GetCollection<Sku>(settings.SkuCollectionName);
         }
 
-        public List<Sku> Get() =>
+        public override List<Sku> Get() =>
             _sku.Find(sku => true).ToList();
 
-        public List<Sku> GetSkuByStyle(int StyleId) =>
-            _sku.Find<Sku>(sku => sku.StyleId == StyleId).ToList();
+        public List<Sku> GetSkuByStyle(int StyleId)
+        {
+            return _sku.Find(sku => sku.StyleId == StyleId).ToList();
+        }
 
-        public Sku GetSku(int SkuNumber) =>
-            _sku.Find<Sku>(sku => sku.SkuNumber == SkuNumber).FirstOrDefault();
+        public override Sku Get(int SkuNumber)
+        {
+            return _sku.Find<Sku>(sku => sku.SkuNumber == SkuNumber).FirstOrDefault();
+        }
 
-        public Sku Create(Sku sku)
+        public override Sku Create(Sku sku)
         {
             _sku.InsertOne(sku);
             return sku;
         }
 
-        public void Update(Sku skuIn) =>
-            _sku.ReplaceOne(sku => sku.SkuNumber == skuIn.SkuNumber, skuIn);
+        public override void Update(Sku SkuIn)
+        {
+            _sku.ReplaceOne(sku => sku.SkuNumber == SkuIn.SkuNumber, SkuIn);
+        }
 
-        public void Remove(Sku skuIn) =>
-            _sku.DeleteOne(sku => sku.SkuNumber == skuIn.SkuNumber);
+        public override void Remove(Sku SkuIn)
+        {
+            _sku.DeleteOne(sku => sku.SkuNumber == SkuIn.SkuNumber);
+        }
 
-        public void Remove(int SkuNumber) =>
+        public override void Remove(int SkuNumber)
+        {
             _sku.DeleteOne(sku => sku.SkuNumber == SkuNumber);
+        }
     }
 }
