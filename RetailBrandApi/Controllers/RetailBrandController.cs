@@ -3,9 +3,11 @@ using RetailBrandApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using Microsoft.AspNetCore.Cors;
 
 namespace RetailBrandApi.Controllers
 {
+    [EnableCors("RetailBrandAllowOrigins")]
     [ApiController]
     public class RetailBrandController : ControllerBase
     {

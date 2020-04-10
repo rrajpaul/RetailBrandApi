@@ -7,8 +7,8 @@ namespace RetailBrandApi.Models
     public class Style
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]        
-        public string _id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        private string _id { get; set; }
 
         public int StyleId { get; set; }
 
